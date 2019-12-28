@@ -1,3 +1,3 @@
 issue-tracker
 
-express, mongoose, mongodb atlas
+express, pug, mongoose, mongodb-atlas
