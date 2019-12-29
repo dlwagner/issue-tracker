@@ -7,7 +7,8 @@ var IssueSchema = new Schema(
     {
         title: { type: String, required: true, max: 100 },
         desc: { type: String, required: true, max: 200 },
-        created: { type: Date, default: Date.now }
+        created: { type: Date, default: Date.now },
+        reporter: { type: Schema.Types.ObjectId, ref: 'User', required: true }
     }
 );
 
@@ -15,7 +16,7 @@ var IssueSchema = new Schema(
 IssueSchema
     .virtual('url')
     .get(function () {
-        return '/catalog/issue/' + this._id;
+        return '/list/issue/' + this._id;
     });
 
 //Export model

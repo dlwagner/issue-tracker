@@ -2,4 +2,15 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p Welcome to #[em Issue Tracker]
+
+  h1 Dynamic content
+
+  if error
+    p Error getting dynamic content.
+  else
+    p The Issue Tracker has the following record counts:
+
+    ul
+      li #[strong Issues:] !{data.issue_count}
+      li #[strong Users:] !{data.user_count}
