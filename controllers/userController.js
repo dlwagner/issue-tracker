@@ -7,7 +7,6 @@ const { sanitizeBody } = require('express-validator');
 
 // Display list of users.
 exports.user_list = function (req, res, next) {
-    // res.send('NOT IMPLEMENTED: User List');
 
     User.find()
         .sort([['last_name']])
@@ -20,7 +19,6 @@ exports.user_list = function (req, res, next) {
 
 // Display detail page for a specific user.
 exports.user_detail = function (req, res, next) {
-    // res.send('NOT IMPLEMENTED: User detail: ' + req.params.id);
     async.parallel({
         user: function (callback) {
             User.findById(req.params.id)
@@ -45,13 +43,11 @@ exports.user_detail = function (req, res, next) {
 
 // Display User create form on GET.
 exports.user_create_get = function (req, res, next) {
-    // res.send('NOT IMPLEMENTED: User create GET');
     res.render('user_form', { title: 'Create User' });
 };
 
 // Handle User create on POST.
 exports.user_create_post = [
-    // res.send('NOT IMPLEMENTED: User create POST');
 
     // Validate fields.
     body('first_name').isLength({ min: 1 }).trim().withMessage('First name must be specified.')
@@ -79,7 +75,6 @@ exports.user_create_post = [
         }
         else {
             // Data from form is valid.
-
             // Create a User object with escaped and trimmed data.
             var user = new User(
                 {
@@ -98,12 +93,55 @@ exports.user_create_post = [
 
 // Display User delete form on GET.
 exports.user_delete_get = function (req, res) {
-    res.send('NOT IMPLEMENTED: User delete GET');
+
+    async.parallel({
+        user: function (callback) {
+            User.findById(req.params.id)
+                .exec(callback)
+        },
+        users_issues: function (callback) {
+            Issue.find({ 'reporter': req.params.id }, 'title ')
+                .exec(callback)
+        },
+    }, function (err, results) {
+        if (err) { return next(err); }
+        if (results.user == null) { // No results.
+            res.redirect('/list/users');
+        }
+        //Successful, so render.
+        res.render('user_delete', { title: 'Delete User', user: results.user, user_issues: results.users_issues });
+    });
 };
 
 // Handle User delete on POST.
-exports.user_delete_post = function (req, res) {
-    res.send('NOT IMPLEMENTED: User delete POST');
+exports.user_delete_post = function (req, res, next) {
+
+    async.parallel({
+        user: function (callback) {
+            User.findById(req.body.userid)
+                .exec(callback)
+        },
+        users_issues: function (callback) {
+            Issue.find({ 'reporter': req.params.id }, 'title ')
+                .exec(callback)
+        },
+    }, function (err, results) {
+        if (err) { return next(err); }
+        // Success
+        if (results.users_issues.length > 0) {
+            // User has issues. Render in same way as for GET route.
+            res.render('user_delete', { title: 'Delete User', user: results.user, user_issues: results.users_issues });
+            return;
+        }
+        else {
+            // User has no issues. Delete object and redirect to the list of users.
+            User.findByIdAndRemove(req.body.userid, function deleteUser(err) {
+                if (err) { return next(err); }
+                // Success - go to user list
+                res.redirect('/list/users')
+            })
+        }
+    });
 };
 
 // Display User update form on GET.
