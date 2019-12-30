@@ -145,11 +145,66 @@ exports.user_delete_post = function (req, res, next) {
 };
 
 // Display User update form on GET.
-exports.user_update_get = function (req, res) {
-    res.send('NOT IMPLEMENTED: User update GET');
+exports.user_update_get = function (req, res, next) {
+    //res.send('NOT IMPLEMENTED: User update GET');
+
+    User.findById(req.params.id, function (err, user) {
+        if (err) { return next(err); }
+        if (user == null) { // User not found.
+            var err = new Error('User not found');
+            err.status = 404;
+            return next(err);
+        }
+        //Successful, so render
+        res.render('user_form', { title: 'Update User', user: user });
+    });
 };
 
 // Handle User update on POST.
-exports.user_update_post = function (req, res) {
-    res.send('NOT IMPLEMENTED: User update POST');
-};
+exports.user_update_post = [
+    // res.send('NOT IMPLEMENTED: User update POST');
+    // Validate fields.
+    body('first_name').isLength({ min: 1 }).trim().withMessage('First name must be specified.')
+        .isAlphanumeric().withMessage('First name has non-alphanumeric characters.'),
+    body('last_name').isLength({ min: 1 }).trim().withMessage('Last name must be specified.')
+        .isAlphanumeric().withMessage('Last name has non-alphanumeric characters.'),
+    body('email').isLength({ min: 1 }).trim().withMessage('Email must be specified.')
+        .isAlphanumeric().withMessage('Email has non-alphanumeric characters.'),
+
+    // Sanitize fields.
+    sanitizeBody('first_name').escape(),
+    sanitizeBody('last_name').escape(),
+    sanitizeBody('email').escape(),
+
+    // Process request after validation and sanitization.
+    (req, res, next) => {
+
+        // Extract the validation errors from a request.
+        const errors = validationResult(req);
+
+        // Create User object with escaped and trimmed data (and the old id!)
+        var user = new User(
+            {
+                first_name: req.body.first_name,
+                last_name: req.body.last_name,
+                email: req.body.email,
+                _id: req.params.id
+            }
+        );
+
+        if (!errors.isEmpty()) {
+            // There are errors. Render the form again with sanitized values and error messages.
+            res.render('user_form', { title: 'Update User', user: user, errors: errors.array() });
+            return;
+        }
+        else {
+            // Data from form is valid. Update the record.
+            User.findByIdAndUpdate(req.params.id, user, {}, function (err, theuser) {
+                if (err) { return next(err); }
+                // Successful - redirect to user detail page.
+                res.redirect(theuser.url);
+            });
+        }
+    }
+
+];
