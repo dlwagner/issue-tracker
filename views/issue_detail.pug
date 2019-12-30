@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1 Title: #{issueinstance.title}
+
+  p Description: #{issueinstance.description}
+
+  p Created: #{issueinstance.created_formatted}
+
+  p Reporter: #{issueinstance.reporter.name}

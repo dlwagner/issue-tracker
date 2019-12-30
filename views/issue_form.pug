@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  h1= title
+
+  form(method='POST' action='')
+    div.form-group
+      label(for='reporter') Reporter:
+      select#reporter.form-control(type='select', placeholder='Select reporter' name='reporter' required='true' )
+        - reporters.sort(function(a, b) {let textA = a.last_name.toUpperCase(); let textB = b.last_name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
+        for reporter in reporters
+          option(value=reporter._id) #{reporter.name}
+    div.form-group
+      label(for='title') Title:
+      input#title.form-control(type='text', placeholder='Title' name='title' required='true')
+    div.form-group
+      label(for='') Description:
+      textarea#description.form-control(type='textarea', placeholder='Description' name='description' rows='3' required='true')
+    div.form-group
+      label(for='created') Date:
+      input#created.form-control(type='date' name='created')
+
+    button.btn.btn-primary(type='submit') Submit
+
+  if errors 
+    ul
+      for error in errors
+        li!= error.msg
