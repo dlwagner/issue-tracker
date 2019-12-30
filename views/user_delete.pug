@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  h1 #{title}: #{user.name}
+  
+  if user_issues.length
+
+    p #[strong Delete the following issues before attempting to delete this user.]
+
+    div(style='margin-left:20px;margin-top:20px')
+
+      h4 Issues
+
+      dl
+      each issue in user_issues
+        dt
+          a(href=issue.url) #{issue.title}
+        dd #{issue.description}
+
+  else
+    p Do you really want to delete this user?
+
+    form(method='POST' action='')
+      div.form-group
+        input#userid.form-control(type='hidden',name='userid', required='true', value=user._id )
+
+      button.btn.btn-primary(type='submit') Delete
