@@ -24,8 +24,8 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 var issues = []
 var users = []
 
-function issueCreate(title, desc, created, reporter, cb) {
-    issuedetail = { title: title, desc: desc, created: created, reporter: reporter }
+function issueCreate(title, description, created, reporter, cb) {
+    issuedetail = { title: title, description: description, created: created, reporter: reporter }
 
     var issue = new Issue(issuedetail);
 
