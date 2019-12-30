@@ -110,13 +110,27 @@ exports.issue_create_post = [
 ];
 
 // Display issue delete form on GET.
-exports.issue_delete_get = function (req, res) {
-    res.send('NOT IMPLEMENTED: Issue delete GET');
+exports.issue_delete_get = function (req, res, next) {
+    //res.send('NOT IMPLEMENTED: Issue delete GET');
+
+    Issue.findById(req.params.id)
+        .populate('reporter')
+        .exec(function (err, del_issue) {
+            if (err) { return next(err); }
+            // Successfull, so render
+            res.render('issue_delete', { title: 'Delete Issue', issue: del_issue });
+        });
 };
 
 // Handle issue delete on POST.
-exports.issue_delete_post = function (req, res) {
-    res.send('NOT IMPLEMENTED: Issue delete POST');
+exports.issue_delete_post = function (req, res, next) {
+    //res.send('NOT IMPLEMENTED: Issue delete POST');
+
+    Issue.findByIdAndRemove(req.body.issueid, function deleteIssue(err) {
+        if (err) { return next(err); }
+        // Success - go to issue list
+        res.redirect('/list/issues')
+    })
 };
 
 // Display issue update form on GET.

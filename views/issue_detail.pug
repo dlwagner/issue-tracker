@@ -8,3 +8,7 @@ block content
   p Created: #{issueinstance.created_formatted}
 
   p Reporter: #{issueinstance.reporter.name}
+
+  hr
+  p
+    a(href=issueinstance.url+'/delete') Delete issue
