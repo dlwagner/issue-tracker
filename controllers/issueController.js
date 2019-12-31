@@ -54,7 +54,7 @@ exports.issue_detail = function (req, res, next) {
 // Display issue create form on GET.
 exports.issue_create_get = function (req, res, next) {
 
-    // Get list of all users.
+    // Get list of all users for drop down box on issue create form.
     User.find()
         .exec(function (err, reporters_list) {
             if (err) { return next(err); }
@@ -72,7 +72,12 @@ exports.issue_create_post = [
     body('reporter', 'Reporter must not be empty.').isLength({ min: 1 }).trim(),
 
     // Sanitize fields (using wildcard).
-    sanitizeBody('*').escape(),
+    //sanitizeBody('*').escape(),
+    // Sanitize fields.
+    sanitizeBody('title').escape(),
+    sanitizeBody('desription').escape(),
+    sanitizeBody('created').toDate(),
+    sanitizeBody('reporter').escape(),
 
     // Process request after validation and sanitization.
     (req, res, next) => {
@@ -134,11 +139,77 @@ exports.issue_delete_post = function (req, res, next) {
 };
 
 // Display issue update form on GET.
-exports.issue_update_get = function (req, res) {
-    res.send('NOT IMPLEMENTED: Issue update GET');
+exports.issue_update_get = function (req, res, next) {
+    // res.send('NOT IMPLEMENTED: Issue update GET');
+
+    async.parallel({
+        issue: function (callback) {
+            Issue.findById(req.params.id).populate('reporter').exec(callback);
+        },
+        users: function (callback) {
+            User.find(callback);
+        },
+    }, function (err, results) {
+        if (err) { return next(err); }
+        if (results.issue == null) { // No results.
+            var err = new Error('Issue not found');
+            err.status = 404;
+            return next(err);
+        }
+        // Success, so render.
+        res.render('issue_form', { title: 'Update Issue', reporters: results.users, issue: results.issue });
+    });
 };
 
 // Handle issue update on POST.
-exports.issue_update_post = function (req, res) {
-    res.send('NOT IMPLEMENTED: Issue update POST');
-};
+exports.issue_update_post = [
+
+    // Validate fields.
+    body('title', 'Title must not be empty.').isLength({ min: 1 }).trim(),
+    body('description', 'Description must not be empty.').isLength({ min: 1 }).trim(),
+    body('created', 'Invalid created date').optional({ checkFalsy: true }).isISO8601(),
+    body('reporter', 'Reporter must not be empty.').isLength({ min: 1 }).trim(),
+
+    // Sanitize fields (using wildcard).
+    //sanitizeBody('*').escape(),
+    // Sanitize fields.
+    sanitizeBody('title').escape(),
+    sanitizeBody('desription').escape(),
+    sanitizeBody('created').toDate(),
+    sanitizeBody('reporter').escape(),
+
+    // Process request after validation and sanitization.
+    (req, res, next) => {
+
+        // Extract the validation errors from a request.
+        const errors = validationResult(req);
+
+        // Create an Issue object with escaped and trimmed data.
+        var issue = new Issue(
+            {
+                title: req.body.title,
+                description: req.body.description,
+                created: req.body.created,
+                reporter: req.body.reporter,
+                _id: req.params.id
+            });
+
+        if (!errors.isEmpty()) {
+            // There are errors. Render form again with sanitized values/error messages.
+            User.find()
+                .exec(function (err, reporters_list) {
+                    if (err) { return next(err); }
+                    res.render('issue_form', { title: 'Update Issue', issue: issue, errors: errors.array() });
+                });
+            return;
+        }
+        else {
+            // Data from form is valid. Update the record.
+            Issue.findByIdAndUpdate(req.params.id, issue, {}, function (err, theissue) {
+                if (err) { return next(err); }
+                // Successful - redirect to issue detail page.
+                res.redirect(theissue.url);
+            });
+        }
+    }
+];

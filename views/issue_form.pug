@@ -9,16 +9,26 @@ block content
       select#reporter.form-control(type='select', placeholder='Select reporter' name='reporter' required='true' )
         - reporters.sort(function(a, b) {let textA = a.last_name.toUpperCase(); let textB = b.last_name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
         for reporter in reporters
-          option(value=reporter._id) #{reporter.name}
+          if issue
+            //- Handle GET form, where issue.reporter is an object, and POST form, where it is a string.
+            option(
+              value=reporter._id
+              selected=(
+                reporter._id.toString()==issue.reporter._id
+                || reporter._id.toString()==issue.reporter
+              ) ? 'selected' : false
+            ) #{reporter.name}
+          else
+            option(value=reporter._id) #{reporter.name}
     div.form-group
       label(for='title') Title:
-      input#title.form-control(type='text', placeholder='Title' name='title' required='true')
+      input#title.form-control(type='text', placeholder='Title' name='title' required='true' value=(undefined===issue ? '' : issue.title))
     div.form-group
-      label(for='') Description:
-      textarea#description.form-control(type='textarea', placeholder='Description' name='description' rows='3' required='true')
+      label(for='description') Description:
+      textarea#description.form-control(type='textarea', placeholder='Description' name='description' rows='3' required='true') #{undefined===issue ? '' : issue.description}
     div.form-group
-      label(for='created') Date:
-      input#created.form-control(type='date' name='created')
+      label(for='created') Date Created:
+      input#created.form-control(type='date' name='created' value=(undefined===issue ? '' : issue.created) )
 
     button.btn.btn-primary(type='submit') Submit
 
