@@ -28,7 +28,7 @@ block content
       textarea#description.form-control(type='textarea', placeholder='Description' name='description' rows='3' required='true') #{undefined===issue ? '' : issue.description}
     div.form-group
       label(for='created') Date Created:
-      input#created.form-control(type='date' name='created' value=(undefined===issue ? '' : issue.created) )
+      input#created.form-control(type='date' name='created' value=(undefined===issue ? '' : issue.created_yyyy_mm_dd) )
 
     button.btn.btn-primary(type='submit') Submit
 

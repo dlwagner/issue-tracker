@@ -19,6 +19,12 @@ IssueSchema
         return moment(this.created).format('MMM Do, YYYY');
     });
 
+IssueSchema
+    .virtual('created_yyyy_mm_dd')
+    .get(function () {
+        return moment(this.created).format('YYYY-MM-DD');
+    })
+
 // Virtual for issue's URL
 IssueSchema
     .virtual('url')
