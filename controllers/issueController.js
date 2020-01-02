@@ -17,7 +17,7 @@ exports.index = function (req, res) {
             User.countDocuments({}, callback);
         }
     }, function (err, results) {
-        res.render('index', { title: 'Issue Tracker Home', error: err, data: results });
+        res.render('index', { title: 'Welcome to Issue Tracker', error: err, data: results });
     });
 };
 
