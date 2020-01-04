@@ -5,9 +5,31 @@ block content
 
   p Description: #{issueinstance.description}
 
+  p Label: #{issueinstance.label.name}
+
+  p Environment: #{issueinstance.environment.name}
+
+  p Source URL: #{issueinstance.source_url}
+
   p Created: #{issueinstance.created_formatted}
 
+  p Due Date: #{issueinstance.duedate_formatted}
+
   p Reporter: #{issueinstance.reporter.name}
+
+  p Assigned to: #{issueinstance.assignee.name}
+
+  p Priority: #{issueinstance.priority.name}
+
+  p Severity: #{issueinstance.severity.name}
+
+  p Steps to reproduce: #{issueinstance.steps_to_reproduce}
+
+  p Expected results: #{issueinstance.expected_results}
+
+  p Actual results: #{issueinstance.actual_results}
+
+  p Status: #{issueinstance.status.name}
 
   hr
   p

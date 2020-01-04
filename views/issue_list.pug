@@ -9,6 +9,7 @@ block content
         tr
           th Title
           th Description
+          th Environment
           th Created
           th Reporter
       tbody
@@ -18,6 +19,8 @@ block content
               a(href=item.url) #{item.title}
             td
               |   #{item.description}
+            td
+              |   #{item.environment.name}
             td
               |   #{item.created_formatted}
             td

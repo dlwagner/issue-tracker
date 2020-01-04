@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1= title
+
+  div
+    table
+      thead
+        tr
+          th Label
+      tbody
+        ul
+          each label in label_list
+            li
+              a(href=label.url) #{label.name}
+          else
+            li There are no labels

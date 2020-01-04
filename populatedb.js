@@ -13,6 +13,11 @@ if (!userArgs[0].startsWith('mongodb')) {
 var async = require('async')
 var Issue = require('./models/issue')
 var User = require('./models/user')
+var Label = require('./models/label')
+var Environment = require('./models/environment')
+var Priority = require('./models/priority')
+var Severity = require('./models/severity')
+var Status = require('./models/status')
 
 var mongoose = require('mongoose');
 var mongoDB = userArgs[0];
@@ -23,9 +28,45 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 var issues = []
 var users = []
+var labels = []
+var environments = []
+var priorities = []
+var severities = []
+var statuses = []
 
-function issueCreate(title, description, created, reporter, cb) {
-    issuedetail = { title: title, description: description, created: created, reporter: reporter }
+function issueCreate(title,
+    description,
+    label,
+    environment,
+    source_url,
+    created,
+    due_date,
+    reporter,
+    assignee,
+    priority,
+    severity,
+    steps_to_reproduce,
+    expected_results,
+    actual_results,
+    status,
+    cb) {
+    issuedetail = {
+        title: title,
+        description: description,
+        label: label,
+        environment: environment,
+        source_url: source_url,
+        created: created,
+        due_date: due_date,
+        reporter: reporter,
+        assignee: assignee,
+        priority: priority,
+        severity: severity,
+        steps_to_reproduce: steps_to_reproduce,
+        expected_results: expected_results,
+        actual_results: actual_results,
+        status: status
+    }
 
     var issue = new Issue(issuedetail);
 
@@ -38,6 +79,190 @@ function issueCreate(title, description, created, reporter, cb) {
         issues.push(issue)
         cb(null, issue)
     });
+}
+
+function statusCreate(status, cb) {
+    statusdetail = { status: status }
+
+    var status = new Status(statusdetail);
+
+    status.save(function (err) {
+        if (err) {
+            cb(err, null)
+            return
+        }
+        console.log('New Status: ' + status);
+        statuses.push(status)
+        cb(null, status)
+    });
+}
+
+function createStatuses(cb) {
+    async.series([
+        function (callback) {
+            statusCreate('new', callback);
+        },
+        function (callback) {
+            statusCreate('in-progress', callback);
+        },
+        function (callback) {
+            statusCreate('verified', callback);
+        },
+        function (callback) {
+            statusCreate('closed', callback);
+        },
+        function (callback) {
+            statusCreate('assigned', callback);
+        },
+    ],
+        // optional callback
+        cb);
+}
+
+function severityCreate(severity, cb) {
+    severitydetail = { severity: severity }
+
+    var severity = new Severity(severitydetail);
+
+    severity.save(function (err) {
+        if (err) {
+            cb(err, null)
+            return
+        }
+        console.log('New Severity: ' + severity);
+        severities.push(severity)
+        cb(null, severity)
+    });
+}
+
+function createSeverities(cb) {
+    async.series([
+        function (callback) {
+            severityCreate('enhancement', callback);
+        },
+        function (callback) {
+            severityCreate('trivial', callback);
+        },
+        function (callback) {
+            severityCreate('minor', callback);
+        },
+        function (callback) {
+            severityCreate('major', callback);
+        },
+        function (callback) {
+            severityCreate('critical', callback);
+        },
+    ],
+        // optional callback
+        cb);
+}
+
+function priorityCreate(priority, cb) {
+    prioritydetail = { priority: priority }
+
+    var priority = new Priority(prioritydetail);
+
+    priority.save(function (err) {
+        if (err) {
+            cb(err, null)
+            return
+        }
+        console.log('New Priority: ' + priority);
+        priorities.push(priority)
+        cb(null, priority)
+    });
+}
+
+function createPriorities(cb) {
+    async.series([
+        function (callback) {
+            priorityCreate('low', callback);
+        },
+        function (callback) {
+            priorityCreate('medium', callback);
+        },
+        function (callback) {
+            priorityCreate('high', callback);
+        },
+    ],
+        // optional callback
+        cb);
+}
+
+function environmentCreate(environment, cb) {
+    environmentdetail = { environment: environment }
+
+    var environment = new Environment(environmentdetail);
+
+    environment.save(function (err) {
+        if (err) {
+            cb(err, null)
+            return
+        }
+        console.log('New Environment: ' + environment);
+        environments.push(environment)
+        cb(null, environment)
+    });
+}
+
+function createEnvironments(cb) {
+    async.series([
+        function (callback) {
+            environmentCreate('win10', callback);
+        },
+        function (callback) {
+            environmentCreate('ubuntu', callback);
+        },
+        function (callback) {
+            environmentCreate('greenNewDeal', callback);
+        },
+        function (callback) {
+            environmentCreate('borderWall', callback);
+        },
+        function (callback) {
+            environmentCreate('earth', callback);
+        },
+    ],
+        // optional callback
+        cb);
+}
+
+function labelCreate(label, cb) {
+    labeldetail = { label: label }
+
+    var label = new Label(labeldetail);
+
+    label.save(function (err) {
+        if (err) {
+            cb(err, null)
+            return
+        }
+        console.log('New Label: ' + label);
+        labels.push(label)
+        cb(null, label)
+    });
+}
+
+function createLabels(cb) {
+    async.series([
+        function (callback) {
+            labelCreate('bug', callback);
+        },
+        function (callback) {
+            labelCreate('issue', callback);
+        },
+        function (callback) {
+            labelCreate('enhancement', callback);
+        },
+        function (callback) {
+            labelCreate('process', callback);
+        },
+        function (callback) {
+            labelCreate('ticket', callback);
+        },
+    ],
+        // optional callback
+        cb);
 }
 
 function userCreate(first_name, last_name, email, cb) {
@@ -67,6 +292,9 @@ function createUsers(cb) {
         function (callback) {
             userCreate('John', 'Doe', 'johndoe@msmail.com', callback);
         },
+        function (callback) {
+            userCreate('Bill', 'Williams', 'bw@msmail.com', callback);
+        },
     ],
         // optional callback
         cb);
@@ -75,19 +303,19 @@ function createUsers(cb) {
 function createIssues(cb) {
     async.series([
         function (callback) {
-            issueCreate('Issue1', 'bug in machine', '2019-11-8', users[0], callback);
+            issueCreate('Issue10', 'bug in machine', labels[1], environments[0], 'https://someurl/', '2019-11-8', '2020-02-15', users[0], users[1], priorities[2], severities[0], '1-2-3', 'success', 'fail', statuses[0], callback);
         },
         function (callback) {
-            issueCreate('Issue2', 'bug in fizzbuster', '2019-02-8', users[0], callback);
+            issueCreate('Issue2', 'bug in coffee', labels[0], environments[1], 'https://someurl/', '2019-11-8', '2020-02-11', users[1], users[0], priorities[0], severities[2], '1-2-3', 'success', 'fail', statuses[1], callback);
         },
         function (callback) {
-            issueCreate('Issue3', 'bug in coffee', '2019-06-8', users[1], callback);
+            issueCreate('AC out', 'ac has stopped working', labels[2], environments[4], '', '2020-01-01', '2020-01-08', users[2], users[1], priorities[2], severities[4], '1-2-3', 'success', 'fail', statuses[3], callback);
         },
         function (callback) {
-            issueCreate('Issue4', 'bug in eye', '2019-01-8', users[2], callback);
+            issueCreate('Process improvement', 'implement change mgt procedures', labels[3], environments[2], '', '2019-11-8', '2020-02-15', users[1], users[0], priorities[1], severities[0], '1-2-3', 'success', 'not implemented', statuses[2], callback);
         },
         function (callback) {
-            issueCreate('Issue5', 'bug in pie', '2019-12-8', users[2], callback);
+            issueCreate('Issue1', 'racoon in garage', labels[1], environments[2], '', '2019-11-8', '2020-02-15', users[0], users[1], priorities[2], severities[3], '1-2-3', 'success', 'fail', statuses[0], callback);
         },
 
     ],
@@ -95,9 +323,16 @@ function createIssues(cb) {
         cb);
 }
 
+
+
 async.series([
+    createStatuses,
+    createSeverities,
+    createPriorities,
+    createEnvironments,
+    createLabels,
     createUsers,
-    createIssues,
+    createIssues
 ],
     // Optional callback
     function (err, results) {
