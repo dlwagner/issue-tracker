@@ -21,7 +21,7 @@ var Status = require('./models/status')
 
 var mongoose = require('mongoose');
 var mongoDB = userArgs[0];
-mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(mongoDB, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -265,15 +265,15 @@ function createLabels(cb) {
         cb);
 }
 
-function userCreate(first_name, last_name, email, cb) {
-    userdetail = { first_name: first_name, last_name: last_name, email: email }
+function userCreate(nickName, displayName, aId, gravatar, provider, cb) {
+    userdetail = { nickName: nickName, displayName: displayName, aId: aId, gravatar: gravatar, provider: provider }
 
     var user = new User(userdetail);
 
     user.save(function (err) {
         if (err) {
-            cb(err, null)
-            return
+            //cb(err, null)
+            //return
         }
         console.log('New User: ' + user);
         users.push(user)
@@ -284,16 +284,19 @@ function userCreate(first_name, last_name, email, cb) {
 function createUsers(cb) {
     async.series([
         function (callback) {
-            userCreate('Rob', 'Smith', 'robsmith@mail.com', callback);
+            userCreate('robsmith', 'robsmith@mail.com', 'auth0|5e0d3cc314eb2a0dd2967v8r', 'https://i2.wp.com/cdn.auth0.com/avatars/rs.png?ssl=1', 'auth0', callback);
         },
         function (callback) {
-            userCreate('Mark', 'Williams', 'markwilliams@hotmail.com', callback);
+            userCreate('markwilliams', 'markwilliams@hotmail.com', 'auth0|5e0d3cc314eb2a0dd2967k9l', 'https://i2.wp.com/cdn.auth0.com/avatars/mw.png?ssl=1', 'auth0', callback);
         },
         function (callback) {
-            userCreate('John', 'Doe', 'johndoe@msmail.com', callback);
+            userCreate('johndoe', 'johndoe@msmail.com', 'auth0|5e0d3cc314eb2a0dd2967y6m', 'https://i2.wp.com/cdn.auth0.com/avatars/jd.png?ssl=1', 'auth0', callback);
         },
         function (callback) {
-            userCreate('Bill', 'Williams', 'bw@msmail.com', callback);
+            userCreate('billwagner', 'bw@msmail.com', 'auth0|5e0d3cc314eb2a0dd2967d4p', 'https://i2.wp.com/cdn.auth0.com/avatars/bw.png?ssl=1', 'auth0', callback);
+        },
+        function (callback) {
+            userCreate('markwilliams', 'markwilliams@hotmail.com', 'auth0|5e0d3cc314eb2a0dd2967k9l', 'https://i2.wp.com/cdn.auth0.com/avatars/mw.png?ssl=1', 'auth0', callback);
         },
     ],
         // optional callback
@@ -338,6 +341,7 @@ async.series([
     function (err, results) {
         if (err) {
             console.log('FINAL ERR: ' + err);
+
         }
         else {
             console.log('Issues: ' + issues);
