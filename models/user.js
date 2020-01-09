@@ -4,9 +4,11 @@ var Schema = mongoose.Schema;
 
 var UserSchema = new Schema(
     {
-        first_name: { type: String, required: true, max: 30 },
-        last_name: { type: String, required: true, max: 30 },
-        email: { type: String, required: true }
+        nickName: { type: String, max: 30 },
+        displayName: { type: String, max: 50 },
+        aId: { type: String, unique: true, required: true },
+        gravatar: { type: String },
+        provider: { type: String }
     }
 );
 
@@ -18,15 +20,15 @@ UserSchema
         // In cases where a user does not have either a first name or last name
         // We want to make sure we handle the exception by returning an empty string for that case
 
-        var fullname = '';
-        if (this.first_name && this.last_name) {
-            fullname = this.first_name + ' ' + this.last_name
+        var nick_name = '';
+        if (this.nickName) {
+            nick_name = this.nickName
         }
-        if (!this.first_name || !this.last_name) {
-            fullname = '';
+        if (!this.nickName) {
+            nick_name = '';
         }
 
-        return fullname;
+        return nick_name;
     });
 
 // Virtual for user's URL

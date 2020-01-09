@@ -3,11 +3,10 @@ var secured = require('../lib/middleware/secured');
 var router = express.Router();
 
 /* GET users listing. */
-/*
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+
+router.get('/', function (req, res, next) {
+  //res.send('respond with a resource');
 });
-*/
 
 /* GET user profile. */
 router.get('/user', secured(), function (req, res, next) {
@@ -17,6 +16,5 @@ router.get('/user', secured(), function (req, res, next) {
     title: 'Profile page'
   });
 });
-
 
 module.exports = router;
