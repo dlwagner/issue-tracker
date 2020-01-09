@@ -6,6 +6,7 @@ var router = express.Router();
 var issue_controller = require('../controllers/issueController');
 var user_controller = require('../controllers/userController');
 
+
 /// ISSUE ROUTES ///
 
 // GET issues home page.
@@ -35,6 +36,7 @@ router.get('/issue/:id', secured(), issue_controller.issue_detail);
 
 // GET request for list of all Issue items.
 router.get('/issues', secured(), issue_controller.issue_list);
+//router.get('/', secured(), issue_controller.issue_list);
 
 
 /// USERS ROUTES ///

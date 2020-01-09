@@ -1,14 +1,31 @@
 extends layout
 
 block content
-  h1= title
+  
   if locals.user
-
-    ul
-      li #[strong Number of Issues:] !{data.issue_count}
-      li #[strong Number of Users:] !{data.user_count}
-
-  if error
-    p Error getting dynamic content.
-  else
-    
+    h1= title
+    div
+      table.table.table-hover
+        thead
+          tr
+          
+            th Title
+            th Description
+            th Environment
+            th Created
+            th Reporter
+        tbody
+          each item in issue_list
+            tr
+              td
+                a(href=item.url) #{item.title}
+              td
+                |   #{item.description}
+              td
+                |   #{item.environment.name}
+              td
+                |   #{item.created_formatted}
+              td
+                |   #{item.reporter.name}
+          else
+            li There are no issues.

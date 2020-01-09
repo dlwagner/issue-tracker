@@ -22,9 +22,10 @@ exports.index = function (req, res) {
             User.countDocuments({}, callback);
         }
     }, function (err, results) {
-        res.render('index', { title: 'Welcome to Issue Tracker', error: err, data: results });
+        res.render('index', { title: 'Issue Tracker', error: err, data: results });
     });
 };
+
 
 // Display list of all issues.
 exports.issue_list = function (req, res, next) {
@@ -38,6 +39,7 @@ exports.issue_list = function (req, res, next) {
             res.render('issue_list', { title: 'Issue List', issue_list: list_issues });
         });
 };
+
 
 // Display detail page for a specific issue.
 exports.issue_detail = function (req, res, next) {
