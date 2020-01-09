@@ -1,0 +1,12 @@
+
+
+-- email box on create user form does not handle special chars.
+-- all users list does not sort. add sorting to user_list.pug (use issue_form.pug as example)
+    --also, userController.js sorts users in the find function, but maybe that is not enough?
+
+--date displays one day early on all issues list. I fixed this in local-library. Use same fix here.
+
+
+--on update issue, date does not show up. FIX THIS! (FIXED) Added new virtual to model.
+
+
