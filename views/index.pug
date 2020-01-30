@@ -1,31 +1,15 @@
+//- index.pug
 extends layout
 
 block content
-  
-  if locals.user
-    h1= title
-    div
-      table.table.table-hover
-        thead
-          tr
-          
-            th Title
-            th Description
-            th Environment
-            th Created
-            th Reporter
-        tbody
-          each item in issue_list
-            tr
-              td
-                a(href=item.url) #{item.title}
-              td
-                |   #{item.description}
-              td
-                |   #{item.environment.name}
-              td
-                |   #{item.created_formatted}
-              td
-                |   #{item.reporter.name}
-          else
-            li There are no issues.
+
+  include header.pug
+
+  main.main-content
+    .container
+      include tabList.pug
+      include tabContent.pug
+      
+  include footer.pug
+
+
