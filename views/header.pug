@@ -1,0 +1,14 @@
+//- header.pug
+header
+    nav.navbar.sticky-top.navbar-expand-lg.py-0
+      a.navbar-brand(href="#")
+        img#bug-thwack-logo(src="../images/bt-logo.PNG" height="40" alt="bug thwack logo" tabindex="-1")
+      ul.navbar-nav.ml-auto
+        li.nav-item.dropdown
+          a#navbardrop.nav-link.dropdown-toggle(href="#" label="userpreferences" data-toggle="dropdown" tabindex="0")
+            img#user-icon(src=locals.user.picture width="30" height="30" alt="logged in user icon")
+          .dropdown-menu.dropdown-menu-right.py-0
+            p You're logged in as:
+            a#profile.dropdown-item(href="#") #{locals.user.nickname}
+            a#profile.dropdown-item(href="/user") profile
+            a#logout.dropdown-item(href="/logout") logout

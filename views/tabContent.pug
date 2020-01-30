@@ -1,0 +1,179 @@
+//-tabContent.pug
+.tab-content
+    // removed "fade in" from tab-pane class because it is buggy. Content fails to show on reload with "fade in"
+    #issues.tab-pane.fade.show.active(role="tabpanel" aria-labelledby="issues-tab")
+        .row
+            #filter-search-row.col-md-8.offset-md-2.filter-search-row
+                .input-group.mb-2.input-group-sm
+                    .input-group-prepend
+                        button.btn.btn-outline-secondary.btn-sm.dropdown-toggle(type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") filters
+                        .dropdown-menu
+                            a.dropdown-item(href="#") Open issues
+                            a.dropdown-item(href="#") My issues
+                            a.dropdown-item(href="#") Assigned to me
+                    input.form-control(type="search" placeholder="search ..." aria-label="Text input with dropdown button")
+        .row
+            .col-md-8.offset-md-2
+                nav#tableNavBar.navbar.navbar-expand-sm.table-filters
+                    button.navbar-toggler(type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+                        span.navbar-toggler-icon
+                    #navbarSupportedContent.collapse.navbar-collapse
+                        ul.navbar-nav.ml-auto
+                            li.nav-item.dropdown
+                                a#statusDropdown.nav-link.dropdown-toggle.py-0(href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+                                    | Status
+                                .dropdown-menu.py-0(aria-labelledby="statusDropdown")
+                                    a.dropdown-item(href="#") Open
+                                    a.dropdown-item(href="#") In-progress
+                                    a.dropdown-item(href="#") Closed
+                                    a.dropdown-item(href="#") Reopened
+                                    .dropdown-divider
+                                    a.dropdown-item(href="#") All
+                            li.nav-item.dropdown
+                                a#authorDropdown.nav-link.dropdown-toggle.py-0(href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+                                    | Author
+                                .dropdown-menu.py-0(aria-labelledby="authorDropdown")
+                                    a.dropdown-item(href="#") JohnDoe
+                                    a.dropdown-item(href="#") dawgner
+                                    a.dropdown-item(href="#") suzieQ
+                                    a.dropdown-item(href="#") janedoe
+                                    a.dropdown-item(href="#") bubba
+                                    .dropdown-divider
+                                    a.dropdown-item(href="#") All
+                            li.nav-item.dropdown
+                                a#assigneeDropdown.nav-link.dropdown-toggle.py-0(href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+                                    | Assignee
+                                .dropdown-menu.py-0(aria-labelledby="assigneeDropdown")
+                                    a.dropdown-item(href="#") JohnDoe
+                                    a.dropdown-item(href="#") dawgner
+                                    a.dropdown-item(href="#") suzieQ
+                                    a.dropdown-item(href="#") janedoe
+                                    a.dropdown-item(href="#") bubba
+                                    .dropdown-divider
+                                    a.dropdown-item(href="#") All
+                            li.nav-item.dropdown
+                                a#sortDropdown.nav-link.dropdown-toggle.py-0(href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+                                    | Sort
+                                .dropdown-menu.py-0(aria-labelledby="sortDropdown")
+                                    a.dropdown-item(href="#") Newest
+                                    a.dropdown-item(href="#") Oldest
+                                    a.dropdown-item(href="#") Recently updated
+                                    a.dropdown-item(href="#") Least recently updated
+                                    a.dropdown-item(href="#") Most commented
+                                    a.dropdown-item(href="#") Least commented
+        .row
+            .col-md-8.offset-md-2
+                table#issuesTable.table.table-hover.table-bordered(style="width:100%;")
+                    thead
+                        tr
+                            th Summary
+                    tbody
+                        each item in issue_list
+                            tr
+                                td
+                                    |   #{item.description}
+                        else
+                            li There are no issues.
+    #newissue.tab-pane.fade(role="tabpanel" aria-labelledby="newissue-tab")
+      .row
+        .col-md-6.offset-md-2.new-issue-form
+          form
+            .form-group
+              label(for="newIssueTitle") Title
+              input#newIssueTitle.form-control(type="text" placeholder="Issue title ...")
+            .form-group
+              label(for="newIssueDescription") Description
+              textarea#newIssueDescription.form-control(rows="10" placeholder="description")
+            div
+              input#filepond(type="file" name="filepond" data-max-files="10" multiple="" required="")
+            .form-group.mt-4
+              button.btn.btn-success(type="button") Create New Issue
+        .col-md-2.new-issue-form.input-group.mb-3
+          form
+            .form-group.mb-3
+              label(for="newIssueCategory") Category
+              select#newIssueCategory.form-control
+                option(selected="") Category...
+                option(value="1") Bug
+                option(value="2") Feature
+                option(value="3") Maintenance
+            .form-group.mb-3
+              label(for="newIssuePriority") Priority
+              select#newIssuePriority.form-control
+                option(selected="") Priority...
+                option(value="1") low
+                option(value="2") medium
+                option(value="3") high
+            .form-group.mb-3
+              label(for="newIssueAssignee") Assignee
+              select#newIssueAssignee.form-control
+                option(selected="") Assignee...
+                option(value="1") John Doe
+                option(value="2") Bill Williams
+                option(value="3") Suzie Q
+            .form-group.mb-3
+              label(for="newIssueMilestone") Milestone
+              select#newIssueMilestone.form-control
+                option(selected="") Milestone...
+                option(value="1") Beta
+                option(value="2") Alpha
+                option(value="3") whatever
+            .form-group.mb-3
+              label(for="newIssueProject") Project
+              select#newIssueProject.form-control
+                option(selected="") Project...
+                option(value="1") Alpha-One
+                option(value="2") FIzzbuster
+                option(value="3") Mars Lander
+    #milestones.tab-pane.fade.col-md-8.offset-md-2(role="tabpanel" aria-labelledby="milestones-tab")
+        h3 Milestones
+        p
+            | Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut
+            | labore et dolore magna aliqua.
+    #settings.tab-pane.fade.col-md-8.offset-md-2(role="tabpanel" aria-labelledby="settings-tab")
+        .project-settings
+            div
+                label(for="projecSettings")
+                    b
+                        h3 Project Settings
+            form.form-group
+                label(for="projectCreate")
+                    b Create New Project
+                .input-group.mb-3
+                    .input-group-prepend
+                        button.btn.btn-success(type="button" onclick="newProjectAlert()") Create
+                    input.form-control(type="text" placeholder="Project name..." aria-label="" aria-describedby="projectCreate")
+                label(for="projectSelect")
+                    b Delete Project
+                .input-group.mb-4
+                    .input-group-prepend
+                        button.btn.btn-danger(type="button" onclick="deleteProjectAlert()") Delete
+                    select#projectSelect.custom-select
+                        option(selected="") Choose project...
+                        option(value="1") Project1
+                        option(value="2") Project2
+                        option(value="3") Project3
+            hr
+        .milestone-settings
+            div
+                label(for="milestoneSettings")
+                    b
+                        h3 Milestone Settings
+            form.form-group
+                label(for="milestoneCreate")
+                    b Create New Milestone
+                .input-group.mb-3
+                    .input-group-prepend
+                        button.btn.btn-success(type="button" onclick="newMilestoneAlert()") Create
+                    input.form-control(type="text" placeholder="Milestone name..." aria-label="" aria-describedby="milestoneCreate")
+                label(for="milestoneSelect")
+                    b Delete Milestone
+                .input-group.mb-4
+                    .input-group-prepend
+                        button.btn.btn-danger(type="button" onclick="deleteMilestoneAlert()") Delete
+                    select#milestoneSelect.custom-select
+                        option(selected="") Choose milestone...
+                        option(value="1") Milestone1
+                        option(value="2") Milestone2
+                        option(value="3") Milestone3
+            hr

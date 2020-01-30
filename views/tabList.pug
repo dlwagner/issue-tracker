@@ -1,0 +1,22 @@
+//- tabList.pug
+.row
+    .col-md-8.offset-md-2
+        ul#btTabs.nav.nav-tabs(role="tablist")
+            li.nav-item.dropdown
+                a.nav-link.dropdown-toggle(data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false")
+                    span#selected Projects
+                #projectTabDropDown.dropdown-menu
+                    a.dropdown-item(href="#") Alpha-One
+                    a.dropdown-item(href="#") FizzBuster
+                    a.dropdown-item(href="#") MarsLander
+                    .dropdown-divider
+                    a.dropdown-item(href="#") All Projects
+            li.nav-item
+                a#issues-tab.nav-link.active(data-toggle="tab" href="#issues" role="tab" aria-controls="issues" aria-selected="true") Issues
+            li.nav-item
+                a#newissue-tab.nav-link(data-toggle="tab" href="#newissue" role="tab" aria-controls="newissue" aria-selected="false") New Issue
+            li.nav-item
+                a#milestones-tab.nav-link(data-toggle="tab" href="#milestones" role="tab" aria-controls="milestones" aria-selected="false") Milestones
+            li.nav-item
+                a#settings-tab.nav-link(data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false")
+                    img(src="https://img.icons8.com/color/25/000000/settings.png")

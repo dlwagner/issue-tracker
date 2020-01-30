@@ -1,0 +1,50 @@
+//- tableNavbar.pug
+.row
+    .col-md-8.offset-md-2
+        nav#tableNavBar.navbar.navbar-expand-sm.table-filters
+            button.navbar-toggler(type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation")
+                span.navbar-toggler-icon
+            #navbarSupportedContent.collapse.navbar-collapse
+                ul.navbar-nav.ml-auto
+                    li.nav-item.dropdown
+                        a#statusDropdown.nav-link.dropdown-toggle.py-0(href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+                            | Status
+                        .dropdown-menu.py-0(aria-labelledby="statusDropdown")
+                            a.dropdown-item(href="#") Open
+                            a.dropdown-item(href="#") In-progress
+                            a.dropdown-item(href="#") Closed
+                            a.dropdown-item(href="#") Reopened
+                            .dropdown-divider
+                            a.dropdown-item(href="#") All
+                    li.nav-item.dropdown
+                        a#authorDropdown.nav-link.dropdown-toggle.py-0(href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+                            | Author
+                        .dropdown-menu.py-0(aria-labelledby="authorDropdown")
+                            a.dropdown-item(href="#") JohnDoe
+                            a.dropdown-item(href="#") dawgner
+                            a.dropdown-item(href="#") suzieQ
+                            a.dropdown-item(href="#") janedoe
+                            a.dropdown-item(href="#") bubba
+                            .dropdown-divider
+                            a.dropdown-item(href="#") All
+                    li.nav-item.dropdown
+                        a#assigneeDropdown.nav-link.dropdown-toggle.py-0(href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+                            | Assignee
+                        .dropdown-menu.py-0(aria-labelledby="assigneeDropdown")
+                            a.dropdown-item(href="#") JohnDoe
+                            a.dropdown-item(href="#") dawgner
+                            a.dropdown-item(href="#") suzieQ
+                            a.dropdown-item(href="#") janedoe
+                            a.dropdown-item(href="#") bubba
+                            .dropdown-divider
+                            a.dropdown-item(href="#") All
+                    li.nav-item.dropdown
+                        a#sortDropdown.nav-link.dropdown-toggle.py-0(href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
+                            | Sort
+                        .dropdown-menu.py-0(aria-labelledby="sortDropdown")
+                            a.dropdown-item(href="#") Newest
+                            a.dropdown-item(href="#") Oldest
+                            a.dropdown-item(href="#") Recently updated
+                            a.dropdown-item(href="#") Least recently updated
+                            a.dropdown-item(href="#") Most commented
+                            a.dropdown-item(href="#") Least commented
