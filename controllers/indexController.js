@@ -27,7 +27,7 @@ exports.index = function (req, res, next) {
 
     user.save(function (err) {
         if (err) { }//swallow it, it's a duplicate
-        //console.log("user.save error: " + err);
+        console.log(err);
     });
 
     async.parallel({
@@ -50,7 +50,8 @@ exports.index = function (req, res, next) {
         //console.log("results: " + results.user);
         if (err) { return next(err); }
         // Success, so render
-        res.render('index1', { title: '', statuses: results.status, labels: results.label, users: results.user, issue_list: results.issue });
+        //res.render('index1', { title: '', statuses: results.status, labels: results.label, users: results.user, issue_list: results.issue });
+        res.render('index', { title: '', issue_list: results.issue });
     });
 
 };
