@@ -2,4 +2,6 @@ node_modules
 populatedb.js
 .env
 hkcommands
+local-appjs
+
 
