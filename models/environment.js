@@ -1,37 +1,33 @@
-var mongoose = require('mongoose');
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable prefer-template */
+/* eslint-disable func-names */
+const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
-var EnvironmentSchema = new Schema(
-    {
-        environment: { type: String, max: 100 }
-    }
-);
+const EnvironmentSchema = new Schema({
+  environment: { type: String, max: 100 },
+});
 
-EnvironmentSchema
-    .virtual('name')
-    .get(function () {
+EnvironmentSchema.virtual('name').get(function() {
+  // In cases where a user does not have either a first name or last name
+  // We want to make sure we handle the exception by returning an empty string for that case
 
-        // In cases where a user does not have either a first name or last name
-        // We want to make sure we handle the exception by returning an empty string for that case
+  let environmentName = '';
+  if (this.environment) {
+    environmentName = this.environment;
+  }
+  if (!this.environment) {
+    environmentName = '';
+  }
 
-        var environment_name = '';
-        if (this.environment) {
-            environment_name = this.environment
-        }
-        if (!this.environment) {
-            environment_name = '';
-        }
-
-        return environment_name;
-    });
+  return environmentName;
+});
 
 // Virtual for issue's URL
-EnvironmentSchema
-    .virtual('url')
-    .get(function () {
-        return '/list/environment/' + this._id;
-    });
+EnvironmentSchema.virtual('url').get(function() {
+  return '/list/environment/' + this._id;
+});
 
-//Export model
+// Export model
 module.exports = mongoose.model('Environment', EnvironmentSchema);

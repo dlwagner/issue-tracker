@@ -1,37 +1,33 @@
-var mongoose = require('mongoose');
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable prefer-template */
+/* eslint-disable func-names */
+const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
-var LabelSchema = new Schema(
-    {
-        label: { type: String, required: true }
-    }
-);
+const LabelSchema = new Schema({
+  label: { type: String, required: true },
+});
 
-LabelSchema
-    .virtual('name')
-    .get(function () {
+LabelSchema.virtual('name').get(function() {
+  // In cases where a user does not have either a first name or last name
+  // We want to make sure we handle the exception by returning an empty string for that case
 
-        // In cases where a user does not have either a first name or last name
-        // We want to make sure we handle the exception by returning an empty string for that case
+  let labelName = '';
+  if (this.label) {
+    labelName = this.label;
+  }
+  if (!this.label) {
+    labelName = '';
+  }
 
-        var label_name = '';
-        if (this.label) {
-            label_name = this.label
-        }
-        if (!this.label) {
-            label_name = '';
-        }
-
-        return label_name;
-    });
+  return labelName;
+});
 
 // Virtual for issue's URL
-LabelSchema
-    .virtual('url')
-    .get(function () {
-        return '/list/label/' + this._id;
-    });
+LabelSchema.virtual('url').get(function() {
+  return '/list/label/' + this._id;
+});
 
-//Export model
+// Export model
 module.exports = mongoose.model('Label', LabelSchema);

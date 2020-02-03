@@ -1,37 +1,33 @@
-var mongoose = require('mongoose');
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable prefer-template */
+/* eslint-disable func-names */
+const mongoose = require('mongoose');
 
-var Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
-var StatusSchema = new Schema(
-    {
-        status: { type: String, required: true }
-    }
-);
+const StatusSchema = new Schema({
+  status: { type: String, required: true },
+});
 
-StatusSchema
-    .virtual('name')
-    .get(function () {
+StatusSchema.virtual('name').get(function() {
+  // In cases where a user does not have either a first name or last name
+  // We want to make sure we handle the exception by returning an empty string for that case
 
-        // In cases where a user does not have either a first name or last name
-        // We want to make sure we handle the exception by returning an empty string for that case
+  let statusName = '';
+  if (this.status) {
+    statusName = this.status;
+  }
+  if (!this.status) {
+    statusName = '';
+  }
 
-        var status_name = '';
-        if (this.status) {
-            status_name = this.status
-        }
-        if (!this.status) {
-            status_name = '';
-        }
-
-        return status_name;
-    });
+  return statusName;
+});
 
 // Virtual for issue's URL
-StatusSchema
-    .virtual('url')
-    .get(function () {
-        return '/list/status/' + this._id;
-    });
+StatusSchema.virtual('url').get(function() {
+  return '/list/status/' + this._id;
+});
 
-//Export model
+// Export model
 module.exports = mongoose.model('Status', StatusSchema);
