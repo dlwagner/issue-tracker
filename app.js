@@ -24,7 +24,7 @@ const strategy = new Auth0Strategy(
     clientID: process.env.AUTH0_CLIENT_ID,
     clientSecret: process.env.AUTH0_CLIENT_SECRET,
     callbackURL:
-      process.env.AUTH0_CALLBACK_URL ||
+      // process.env.AUTH0_CALLBACK_URL ||
       'http://localhost:3000/callback',
   },
   (accessToken, refreshToken, extraParams, profile, done) =>
