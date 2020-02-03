@@ -23,32 +23,44 @@
                                 a#statusDropdown.nav-link.dropdown-toggle.py-0(href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
                                     | Status
                                 .dropdown-menu.py-0(aria-labelledby="statusDropdown")
-                                    a.dropdown-item(href="#") Open
-                                    a.dropdown-item(href="#") In-progress
-                                    a.dropdown-item(href="#") Closed
-                                    a.dropdown-item(href="#") Reopened
+                                    each status in status_list
+                                        a.dropdown-item(href="#") #{status.name}
+                                    else
+                                        li No Statuses
+                                    //-a.dropdown-item(href="#") Open
+                                    //-a.dropdown-item(href="#") In-progress
+                                    //-a.dropdown-item(href="#") Closed
+                                    //-a.dropdown-item(href="#") Reopened
                                     .dropdown-divider
                                     a.dropdown-item(href="#") All
                             li.nav-item.dropdown
                                 a#authorDropdown.nav-link.dropdown-toggle.py-0(href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
                                     | Author
                                 .dropdown-menu.py-0(aria-labelledby="authorDropdown")
-                                    a.dropdown-item(href="#") JohnDoe
-                                    a.dropdown-item(href="#") dawgner
-                                    a.dropdown-item(href="#") suzieQ
-                                    a.dropdown-item(href="#") janedoe
-                                    a.dropdown-item(href="#") bubba
+                                    each user in user_list
+                                        a.dropdown-item(href="#") #{user.name}
+                                    else
+                                        li No Authors 
+                                    //-a.dropdown-item(href="#") JohnDoe
+                                    //-a.dropdown-item(href="#") dawgner
+                                    //-a.dropdown-item(href="#") suzieQ
+                                    //-a.dropdown-item(href="#") janedoe
+                                    //-a.dropdown-item(href="#") bubba
                                     .dropdown-divider
                                     a.dropdown-item(href="#") All
                             li.nav-item.dropdown
                                 a#assigneeDropdown.nav-link.dropdown-toggle.py-0(href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
                                     | Assignee
                                 .dropdown-menu.py-0(aria-labelledby="assigneeDropdown")
-                                    a.dropdown-item(href="#") JohnDoe
-                                    a.dropdown-item(href="#") dawgner
-                                    a.dropdown-item(href="#") suzieQ
-                                    a.dropdown-item(href="#") janedoe
-                                    a.dropdown-item(href="#") bubba
+                                    each user in user_list
+                                        a.dropdown-item(href="#") #{user.name}
+                                    else
+                                        li No Assignees
+                                    //-a.dropdown-item(href="#") JohnDoe
+                                    //-a.dropdown-item(href="#") dawgner
+                                    //-a.dropdown-item(href="#") suzieQ
+                                    //-a.dropdown-item(href="#") janedoe
+                                    //-a.dropdown-item(href="#") bubba
                                     .dropdown-divider
                                     a.dropdown-item(href="#") All
                             li.nav-item.dropdown

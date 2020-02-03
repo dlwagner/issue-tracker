@@ -12,50 +12,56 @@ const { sanitizeBody } = require('express-validator');
 var async = require('async');
 
 // Display list of all issues.
-exports.index = function (req, res, next) {
+exports.index = function(req, res, next) {
+  // Insert authenticated user into User collection.
+  // A failed insert means the user already exists.
+  var user = new User({
+    nickName: req.user.nickname,
+    aId: req.user.id,
+    displayName: req.user.displayName,
+    gravatar: req.user.picture,
+    provider: req.user.provider,
+  });
 
-    // Insert authenticated user into User collection.
-    // A failed insert means the user already exists.
-    var user = new User(
-        {
-            nickName: req.user.nickname,
-            aId: req.user.id,
-            displayName: req.user.displayName,
-            gravatar: req.user.picture,
-            provider: req.user.provider
-        });
+  user.save(function(err) {
+    if (err) {
+    } //swallow it, it's a duplicate
+    console.log(err);
+  });
 
-    user.save(function (err) {
-        if (err) { }//swallow it, it's a duplicate
-        console.log(err);
-    });
-
-    async.parallel({
-
-        issue: function (callback) {
-            Issue.find({}, 'title description')
-                .populate('status')
-                .exec(callback);
-        },
-        user: function (callback) {
-            User.find().exec(callback);
-        },
-        label: function (callback) {
-            Label.find().exec(callback);
-        },
-        status: function (callback) {
-            Status.find().exec(callback);
-        },
-    }, function (err, results) {
-        //console.log("results: " + results.user);
-        if (err) { return next(err); }
-        // Success, so render
-        //res.render('index1', { title: '', statuses: results.status, labels: results.label, users: results.user, issue_list: results.issue });
-        res.render('index', { title: '', issue_list: results.issue });
-    });
-
+  async.parallel(
+    {
+      issue: function(callback) {
+        Issue.find({}, 'title description')
+          .populate('status')
+          .exec(callback);
+      },
+      user: function(callback) {
+        User.find({}, 'nickName').exec(callback);
+      },
+      label: function(callback) {
+        Label.find().exec(callback);
+      },
+      status: function(callback) {
+        Status.find().exec(callback);
+      },
+    },
+    function(err, results) {
+      console.log('results: ' + results.user);
+      if (err) {
+        return next(err);
+      }
+      // Success, so render
+      //res.render('index1', { title: '', statuses: results.status, labels: results.label, users: results.user, issue_list: results.issue });
+      res.render('index', {
+        title: '',
+        issue_list: results.issue,
+        user_list: results.user,
+        status_list: results.status,
+      });
+    },
+  );
 };
-
 
 /*
 async.series([
@@ -121,7 +127,7 @@ console.log("req.user.id: " + req.user.id);
 console.log("req.user.displayName: " + req.user.displayName);
 console.log("req.user.provider: " + req.user.provider);*/
 
-    //const { _raw, _json, ...userProfile } = req.user;
+//const { _raw, _json, ...userProfile } = req.user;
 /*console.log("In index Controller, userProfile: " +
     JSON.stringify(userProfile.nickname) +
     JSON.stringify(userProfile.picture) +
@@ -136,4 +142,3 @@ Issue.find({}, 'title description environment created reporter')
         res.render('index', { title: 'Issue List', issue_list: list_issues });
     });
     */
-
