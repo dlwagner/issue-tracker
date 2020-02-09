@@ -23,7 +23,7 @@
                                 a#statusDropdown.nav-link.dropdown-toggle.py-0(href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
                                     | Status
                                 .dropdown-menu.py-0(aria-labelledby="statusDropdown")
-                                    each status in status_list
+                                    each status in statuses
                                         a.dropdown-item(href="#") #{status.name}
                                     else
                                         li No Statuses
@@ -37,7 +37,7 @@
                                 a#authorDropdown.nav-link.dropdown-toggle.py-0(href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
                                     | Author
                                 .dropdown-menu.py-0(aria-labelledby="authorDropdown")
-                                    each user in user_list
+                                    each user in users
                                         a.dropdown-item(href="#") #{user.name}
                                     else
                                         li No Authors 
@@ -52,7 +52,7 @@
                                 a#assigneeDropdown.nav-link.dropdown-toggle.py-0(href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
                                     | Assignee
                                 .dropdown-menu.py-0(aria-labelledby="assigneeDropdown")
-                                    each user in user_list
+                                    each user in users
                                         a.dropdown-item(href="#") #{user.name}
                                     else
                                         li No Assignees
@@ -80,63 +80,77 @@
                         tr
                             th Summary
                     tbody
-                        each item in issue_list
+                        each issue in issues
                             tr
                                 td
-                                    |   #{item.description}
+                                    |   #{issue.description} #{issue.category.name} #{issue.priority.name}
                         else
                             li There are no issues.
     #newissue.tab-pane.fade(role="tabpanel" aria-labelledby="newissue-tab")
-      .row
+      .form-row
         .col-md-6.offset-md-2.new-issue-form
-          form
+          form(method="POST" action="/newissue")
             .form-group
               label(for="newIssueTitle") Title
-              input#newIssueTitle.form-control(type="text" placeholder="Issue title ...")
+              input#newIssueTitle.form-control(type="text" placeholder="Issue title ..." name='title' required='true')
             .form-group
               label(for="newIssueDescription") Description
-              textarea#newIssueDescription.form-control(rows="10" placeholder="description")
+              textarea#newIssueDescription.form-control(rows="10" placeholder="description" name='description' required='true')
             div
-              input#filepond(type="file" name="filepond" data-max-files="10" multiple="" required="")
-            .form-group.mt-4
-              button.btn.btn-success(type="button") Create New Issue
-        .col-md-2.new-issue-form.input-group.mb-3
-          form
+              input#filepond(type="file" name="filepond" data-max-files="10" multiple="")
+            //-.form-group.mt-4
+              button.btn.btn-success(type="submit") Create New Issue
+              //-button.btn.btn-success(type="button") Create New Issue
             .form-group.mb-3
-              label(for="newIssueCategory") Category
-              select#newIssueCategory.form-control
+              label(for="category") Category
+              select#category.form-control(type='select', placeholder='Category ...' name='category' required='true')
                 option(selected="") Category...
-                option(value="1") Bug
-                option(value="2") Feature
-                option(value="3") Maintenance
+                  each category in categories
+                    option(value=category._id) #{category.name}
+                  else
+                    li No Categories
             .form-group.mb-3
-              label(for="newIssuePriority") Priority
-              select#newIssuePriority.form-control
+              label(for="priority") Priority
+              select#priority.form-control(type='select', placeholder='Priority ...' name='priority')
                 option(selected="") Priority...
-                option(value="1") low
-                option(value="2") medium
-                option(value="3") high
+                    each priority in priorities
+                        option(value=priority._id) #{priority.name}
+                    else
+                        li No priorites
             .form-group.mb-3
-              label(for="newIssueAssignee") Assignee
-              select#newIssueAssignee.form-control
+              label(for="assignee") Assignee
+              select#assignee.form-control(type='select', placeholder='Assignee ...' name='assignee')
                 option(selected="") Assignee...
-                option(value="1") John Doe
-                option(value="2") Bill Williams
-                option(value="3") Suzie Q
+                  each assignee in users
+                    option(value=assignee._id) #{assignee.name}
+                  else
+                    li No Assignees
             .form-group.mb-3
-              label(for="newIssueMilestone") Milestone
-              select#newIssueMilestone.form-control
+              label(for="milestone") Milestone
+              select#milestone.form-control(type='select', placeholder='Milestone ...' name='milestone')
                 option(selected="") Milestone...
-                option(value="1") Beta
-                option(value="2") Alpha
-                option(value="3") whatever
+                  each milestone in milestones
+                    option(value=milestone._id) #{milestone.name}
+                  else
+                    li No Milestones
             .form-group.mb-3
-              label(for="newIssueProject") Project
-              select#newIssueProject.form-control
+              label(for="project") Project
+              select#project.form-control(type='select', placeholder='Project ...' name='project')
                 option(selected="") Project...
-                option(value="1") Alpha-One
-                option(value="2") FIzzbuster
-                option(value="3") Mars Lander
+                  each project in projects
+                    option(value=project._id) #{project.name}
+                  else
+                    li No Projects
+            .form-group.mb-3
+              label(for="status") Status
+              select#status.form-control(type='select', placeholder='Status ...' name='status')
+                option(selected="") Status...
+                  each status in statuses
+                    option(value=status._id) #{status.name}
+                  else
+                    li No Statuses
+            .form-group.mt-4
+              button.btn.btn-success(type="submit") Create New Issue
     #milestones.tab-pane.fade.col-md-8.offset-md-2(role="tabpanel" aria-labelledby="milestones-tab")
         h3 Milestones
         p
