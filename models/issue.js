@@ -2,42 +2,35 @@
 /* eslint-disable func-names */
 /* eslint-disable prefer-template */
 const mongoose = require('mongoose');
-const moment = require('moment');
+// const moment = require('moment');
 
 const { Schema } = mongoose;
 
 const IssueSchema = new Schema({
   title: { type: String, required: true, max: 100 },
   description: { type: String, required: true, max: 200 },
-  label: {
-    type: Schema.Types.ObjectId,
-    ref: 'Label',
-    required: true,
+  author: {
+    type: String,
   },
-  environment: { type: Schema.Types.ObjectId, ref: 'Environment' },
-  source_url: { type: String, max: 300 },
-  created: { type: Date, default: Date.now, required: true },
-  due_date: { type: Date },
-  reporter: {
+  category: {
     type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
+    ref: 'Category',
+  },
+  priority: {
+    type: Schema.Types.ObjectId,
+    ref: 'Priority',
   },
   assignee: { type: Schema.Types.ObjectId, ref: 'User' },
-  priority: { type: Schema.Types.ObjectId, ref: 'Priority' },
-  severity: { type: Schema.Types.ObjectId, ref: 'Severity' },
-  steps_to_reproduce: { type: String, max: 1000 },
-  expected_results: { type: String, max: 1000 },
-  actual_results: { type: String, max: 1000 },
+  milestone: { type: Schema.Types.ObjectId, ref: 'Milestone' },
+  project: { type: Schema.Types.ObjectId, ref: 'Project' },
   status: {
     type: Schema.Types.ObjectId,
     ref: 'Status',
-    required: true,
   },
 });
 
 // Virtual for created date
-IssueSchema.virtual('created_formatted').get(function() {
+/* IssueSchema.virtual('created_formatted').get(function() {
   return moment(this.created).format('MMM Do, YYYY');
 });
 
@@ -56,7 +49,7 @@ IssueSchema.virtual('duedate_formatted').get(function() {
 // Virtual for issue's URL
 IssueSchema.virtual('url').get(function() {
   return '/list/issue/' + this._id;
-});
+}); */
 
 // Export model
 module.exports = mongoose.model('Issue', IssueSchema);
