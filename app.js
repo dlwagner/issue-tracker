@@ -98,6 +98,7 @@ app.use(userInViews());
 app.use('/', authRouter);
 app.use('/', indexRouter);
 app.use('/', usersRouter);
+app.use('/newissue', indexRouter);
 // app.use('/list', listRouter);
 
 // catch 404 and forward to error handler
