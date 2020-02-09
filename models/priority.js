@@ -26,9 +26,9 @@ PrioritySchema.virtual('name').get(function() {
 });
 
 // Virtual for issue's URL
-PrioritySchema.virtual('url').get(function() {
+/* PrioritySchema.virtual('url').get(function() {
   return '/list/priority/' + this._id;
-});
+}); */
 
 // Export model
 module.exports = mongoose.model('Priority', PrioritySchema);

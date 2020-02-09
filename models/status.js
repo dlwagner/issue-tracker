@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const StatusSchema = new Schema({
-  status: { type: String, required: true },
+  status: { type: String },
 });
 
 StatusSchema.virtual('name').get(function() {
@@ -25,9 +25,9 @@ StatusSchema.virtual('name').get(function() {
 });
 
 // Virtual for issue's URL
-StatusSchema.virtual('url').get(function() {
+/* StatusSchema.virtual('url').get(function() {
   return '/list/status/' + this._id;
-});
+}); */
 
 // Export model
 module.exports = mongoose.model('Status', StatusSchema);
