@@ -154,7 +154,57 @@ exports.create_issue_post = [
       console.log('We got Validation errors');
       // There are errors. Render form again with sanitized values/error messages.
       // eslint-disable-next-line camelcase
-      User.find().exec(function(err, reporters_list) {
+      async.parallel(
+        {
+          issue(callback) {
+            Issue.find({}, 'title description')
+              .populate('category')
+              .populate('priority')
+              .populate('status')
+              .populate('users')
+              .populate('milestone')
+              .populate('project')
+              .exec(callback);
+          },
+          user(callback) {
+            User.find({}, 'nickName').exec(callback);
+          },
+          category(callback) {
+            Category.find().exec(callback);
+          },
+          status(callback) {
+            Status.find().exec(callback);
+          },
+          priority(callback) {
+            Priority.find().exec(callback);
+          },
+          project(callback) {
+            Project.find().exec(callback);
+          },
+          milestone(callback) {
+            Milestone.find().exec(callback);
+          },
+        },
+        // eslint-disable-next-line consistent-return
+        function(err, results) {
+          if (err) {
+            return next(err);
+          }
+          // Success, so render
+          // console.log('issues: ' + results.issue);
+          res.render('index', {
+            title: '',
+            issues: results.issue,
+            users: results.user,
+            statuses: results.status,
+            priorities: results.priority,
+            categories: results.category,
+            milestones: results.milestone,
+            projects: results.project,
+          });
+        },
+      );
+      /* User.find().exec(function(err, reporters_list) {
         if (err) {
           return next(err);
         }
@@ -163,7 +213,7 @@ exports.create_issue_post = [
           reporters: reporters_list,
           errors: errors.array(),
         });
-      });
+      }); */
       // eslint-disable-next-line no-useless-return
       return;
       //  eslint-disable-next-line no-else-return
