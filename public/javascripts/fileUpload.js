@@ -1,3 +1,4 @@
-FilePond.registerPlugin(FilePondPluginFileEncode);
+/* eslint-disable no-undef */
+//FilePond.registerPlugin(FilePondPluginFileEncode);
 
-FilePond.parse(document.body);
+//FilePond.parse(document.body);
