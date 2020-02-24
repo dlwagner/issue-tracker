@@ -28,11 +28,11 @@ $(function() {
 // New Issue Tab - Filepond
 // get a reference to the input element
 // eslint-disable-next-line no-undef
-const inputElement = document.querySelector('input[id="filepond"]');
+// const inputElement = document.querySelector('input[type="file"]');
 
 // create a FilePond instance at the input element location
 
-const pond = FilePond.create(inputElement);
+// const pond = FilePond.create(inputElement);
 
 // Settings Tab
 function newProjectAlert() {
