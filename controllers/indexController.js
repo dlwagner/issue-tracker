@@ -14,6 +14,10 @@ const Status = require('../models/status');
 const Project = require('../models/project');
 const Milestone = require('../models/milestone');
 
+let fileNames = [];
+
+// const imageMimeTypes = ['image/jpeg', 'image/png', 'images/gif'];
+
 // Display list of all issues.
 exports.index = function(req, res, next) {
   // console.log('INDEX CONTROLLER');
@@ -38,7 +42,7 @@ exports.index = function(req, res, next) {
   async.parallel(
     {
       issue(callback) {
-        Issue.find({}, 'title description')
+        Issue.find({}, 'title description issueFile')
           .populate('category')
           .populate('priority')
           .populate('status')
@@ -132,9 +136,14 @@ exports.create_issue_post = [
     console.log('req.body.description: ' + req.body.description);
     console.log('req.body.priority: ' + req.body.priority);
     console.log('req.body.category: ' + req.body.category);
+    console.log('req.files.length: ' + req.files.length);
 
     // Extract the validation errors from a request.
     const errors = validationResult(req);
+
+    for (let i = 0; i < req.files.length; i++) {
+      fileNames[i] = req.files[i].filename;
+    }
 
     // Create an Issue object with escaped and trimmed data.
     // eslint-disable-next-line prefer-const
@@ -148,6 +157,7 @@ exports.create_issue_post = [
       milestone: req.body.milestone,
       project: req.body.project,
       status: req.body.status,
+      files: fileNames,
     });
 
     if (!errors.isEmpty()) {
@@ -204,7 +214,7 @@ exports.create_issue_post = [
           });
         },
       );
-      /* User.find().exec(function(err, reporters_list) {
+      User.find().exec(function(err, reporters_list) {
         if (err) {
           return next(err);
         }
@@ -213,7 +223,7 @@ exports.create_issue_post = [
           reporters: reporters_list,
           errors: errors.array(),
         });
-      }); */
+      });
       // eslint-disable-next-line no-useless-return
       return;
       //  eslint-disable-next-line no-else-return
