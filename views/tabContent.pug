@@ -87,7 +87,7 @@
                         else
                             li There are no issues.
     #newissue.tab-pane.fade(role="tabpanel" aria-labelledby="newissue-tab")
-        form(method="POST" action="/newissue")
+        form(method="POST" action="/newissue" enctype="multipart/form-data")
             .row
                 .col-md-6.offset-md-2.new-issue-form
                     .form-group
@@ -97,7 +97,10 @@
                         label(for="newIssueDescription") Description
                         textarea#newIssueDescription.form-control(rows="10" placeholder="description" name='description' required='true')
                     div
-                        input#filepond(type="file" name="filepond" class="filepond" data-max-files="10" multiple="" accept='image/*,.pdf,.doc,.docx,.txt')
+                    .custom-file.mb-3
+                        input#file.custom-file-input(type="file" name="file" multiple)
+                        label.custom-file-label(for="file") Choose File (limit three)
+                        //-input#filepond(type="file" name="filepond" class="filepond" data-max-files="3" multiple)
                         //-.form-group.mt-4
                         button.btn.btn-success(type="submit") Create New Issue
                 .col-md-2.new-issue-form.input-group.mb-3
