@@ -27,6 +27,7 @@ const IssueSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Status',
   },
+  files: { type: [String] },
 });
 
 // Virtual for created date
