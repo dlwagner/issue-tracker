@@ -21,7 +21,14 @@ html(lang="en")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js")
     script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js") 
     script(src="../javascripts/dataTables.js")
-    
-  body
-    block content
     script(src="../javascripts/tabs.js")
+
+  include header.pug
+
+  body
+  main.main-content
+    .container
+      include tabList.pug
+      block content
+
+  include footer.pug
