@@ -83,7 +83,9 @@
                         each issue in issues
                             tr
                                 td
-                                    |   #{issue.description} #{issue.category.name} #{issue.priority.name}
+                                    a#issueTitle(href="/issueDetails/" + issue._id) #{issue.title} 
+                                    pre.
+                                        #{issue.title} #{issue.category.name} #{issue.priority.name}
                         else
                             li There are no issues.
     #newissue.tab-pane.fade(role="tabpanel" aria-labelledby="newissue-tab")
