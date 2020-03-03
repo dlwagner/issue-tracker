@@ -4,9 +4,11 @@
 /* eslint-disable consistent-return */
 /* eslint-disable func-names */
 const async = require('async');
+const { ObjectID } = require('bson');
 const { body, validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 const Issue = require('../models/issue');
+const IssueHistory = require('../models/issueHistory');
 const User = require('../models/user');
 const Priority = require('../models/priority');
 const Category = require('../models/category');
@@ -131,13 +133,13 @@ exports.create_issue_post = [
 
   // Process request after validation and sanitization.
   (req, res, next) => {
-    console.log('CREATE ISSUE POST');
+    /* console.log('CREATE ISSUE POST');
     console.log('req.body.title: ' + req.body.title);
     console.log('req.body.description: ' + req.body.description);
     console.log('req.body.priority: ' + req.body.priority);
     console.log('req.body.category: ' + req.body.category);
     console.log('req.files.length: ' + req.files.length);
-
+*/
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
@@ -145,9 +147,12 @@ exports.create_issue_post = [
       fileNames[i] = req.files[i].filename;
     }
 
+    const id = new ObjectID();
+    // console.log('id: ' + id);
+
     // Create an Issue object with escaped and trimmed data.
     // eslint-disable-next-line prefer-const
-    let issue = new Issue({
+    const issue = new Issue({
       title: req.body.title,
       description: req.body.description,
       author: req.user.nickname,
@@ -158,6 +163,21 @@ exports.create_issue_post = [
       project: req.body.project,
       status: req.body.status,
       files: fileNames,
+      cId: id,
+    });
+
+    const issueHistory = new IssueHistory({
+      title: req.body.title,
+      description: req.body.description,
+      author: req.user.nickname,
+      category: req.body.category,
+      priority: req.body.priority,
+      assignee: req.body.assignee,
+      milestone: req.body.milestone,
+      project: req.body.project,
+      status: req.body.status,
+      files: fileNames,
+      cId: id,
     });
 
     if (!errors.isEmpty()) {
@@ -235,8 +255,78 @@ exports.create_issue_post = [
         }
         //  successful - redirect to new book record.
         //  res.redirect(issue.url);
-        res.redirect('/');
+        // res.redirect('/');
       });
+
+      issueHistory.save(function(err) {
+        if (err) {
+          return next(err);
+        }
+        //  successful - redirect to new book record.
+        //  res.redirect(issue.url);
+        // res.redirect('/');
+      });
+      res.redirect('/');
     }
   },
 ];
+
+exports.get_issue_details = function(req, res) {
+  res.render('issueDetail', {});
+};
+/*
+exports.get_issue_details = function(req, res, next) {
+  console.log('get issue details req.params.id: ' + req.params.id);
+  async.parallel(
+    {
+      issue(callback) {
+        Issue.find({}, 'title description issueFile')
+          .populate('category')
+          .populate('priority')
+          .populate('status')
+          .populate('users')
+          .populate('milestone')
+          .populate('project')
+          .exec(callback);
+      },
+      user(callback) {
+        User.find({}, 'nickName').exec(callback);
+      },
+      category(callback) {
+        Category.find().exec(callback);
+      },
+      status(callback) {
+        Status.find().exec(callback);
+      },
+      priority(callback) {
+        Priority.find().exec(callback);
+      },
+      project(callback) {
+        Project.find().exec(callback);
+      },
+      milestone(callback) {
+        Milestone.find().exec(callback);
+      },
+    },
+    // eslint-disable-next-line consistent-return
+    function(err, results) {
+      if (err) {
+        return next(err);
+      }
+      // console.log('get issue details');
+      // Success, so render
+      // console.log('issues: ' + results.issue);
+      res.render('issueDetail', {
+        title: '',
+        issues: results.issue,
+        users: results.user,
+        statuses: results.status,
+        priorities: results.priority,
+        categories: results.category,
+        milestones: results.milestone,
+        projects: results.project,
+      });
+    },
+  );
+};
+*/
