@@ -18,3 +18,20 @@ $(document).ready(function() {
   // Set table length (numRows) to 15
   table.page.len(10).draw();
 });
+
+let dTable = '';
+$(document).ready(function() {
+  dTable = $('#detailTable').DataTable({
+    // "dom": '<"top"i>rt<"bottom"p><"clear">',
+    // Center pagination below table. This combined with CSS styling.
+    dom: 'rt<"bottom"p><"clear">',
+    // hide table functions
+    searching: false,
+    info: false,
+    ordering: false,
+    bLengthChange: false,
+    bPaginate: false,
+  });
+  // Set table length (numRows) to 15
+  dTable.page.len(10).draw();
+});
