@@ -28,6 +28,7 @@ const IssueSchema = new Schema({
     ref: 'Status',
   },
   files: { type: [String] },
+  cId: { type: String },
 });
 
 // Virtual for created date
