@@ -1,0 +1,65 @@
+extends layout
+
+block content
+  .row
+    .col-md-8.offset-md-2
+      table#detailTable.table.table-hover.table-bordered(style="width:100%;")
+        thead
+          tr
+            th Summary
+        tbody
+          tr
+            td
+              p Hello World
+  .row
+    .col-md-8.offset-md-2
+      .form-check.form-check-inline
+        input#inlineRadio1.form-check-input.ml-2(type="radio" name="inlineRadioOptions" value="option1" checked="")
+        label.form-check-label(for="inlineRadio1")
+          font(color="green") Reopened
+          |  &nbsp >
+      .form-check.form-check-inline
+        input#inlineRadio2.form-check-input(type="radio" name="inlineRadioOptions" value="option2")
+        label.form-check-label(for="inlineRadio2") Resolved &nbsp >
+      .form-check.form-check-inline
+        input#inlineRadio3.form-check-input(type="radio" name="inlineRadioOptions" value="option3" disabled="")
+        label.form-check-label(for="inlineRadio3") Closed
+      form
+        #updateIssueForm.form-group
+          label(for="updateIssueDescription")
+          textarea#updateIssueDescription.form-control(rows="10" placeholder="")
+        .form-row
+          .col
+            label(for="updateIssuePriority") Priority
+            select#updateIssuePriority.form-control
+              option(selected="") Priority...
+              option(value="1") low
+              option(value="2") medium
+              option(value="3") high
+          .col
+            label(for="updateIssueCategory") Category
+            select#updateIssueCategory.form-control
+              option(selected="") Category...
+              option(value="1") Bug
+              option(value="2") Feature
+              option(value="3") Maintenance
+        .form-row.mb-3
+          .col
+            label(for="updateIssueAssignee") Assignee
+            select#updateIssueAssignee.form-control
+              option(selected="") Assignee...
+              option(value="1") John Doe
+              option(value="2") Bill Williams
+              option(value="3") Suzie Q
+          .col
+            label(for="updateIssueMilestone") Milestone
+            select#updateIssueMilestone.form-control
+              option(selected="") Milestone...
+              option(value="1") Beta
+              option(value="2") Alpha
+              option(value="3") whatever
+        #here.form-group.mt-4
+          input#filepond(type="file" name="filepond" data-max-files="10" multiple="" required="")
+        .form-group.mt-4
+          button.btn.btn-success(type="button") Update Issue
+          
