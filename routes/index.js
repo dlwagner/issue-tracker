@@ -20,4 +20,20 @@ router.post(
   indexController.create_issue_post,
 );
 
+/*
+// @route GET /issueDetails/:id
+// @desc show details and history of issue
+router.get(
+  '/issueDetails/:id',
+  secured(),
+  indexController.get_issue_details,
+);
+*/
+
+router.get(
+  '/issueDetails/:id',
+  secured(),
+  indexController.get_issue_details,
+);
+
 module.exports = router;
