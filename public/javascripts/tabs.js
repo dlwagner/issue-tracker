@@ -6,10 +6,8 @@
 
 // https://stackoverflow.com/questions/12131273/twitter-bootstrap-tabs-url-doesnt-change
 // Add tab href to url.
-/*
 $(function() {
   var hash = window.location.hash;
-  // hash && $('ul.nav a[href="' + hash + '"]').tab('show');
   hash && $('ul.nav a[href="' + hash + '"]').tab('show');
 
   $('.nav-tabs a').click(function(e) {
@@ -19,34 +17,11 @@ $(function() {
     $('html,body').scrollTop(scrollmem);
   });
 });
-*/
+
 $(function() {
   // eslint-disable-next-line no-undef
   $('#btTabs a[href="#issues"]').tab('show');
 });
-
-/*
-document
-  .getElementById('issueTitle')
-  .addEventListener('click', function() {
-    // alert('link clicked');
-
-    getIssueDetails();
-  });
-
-function getIssueDetails() {
-  // console.log('get issue details');
-  alert('get issue details');
-}
-*/
-// New Issue Tab - Filepond
-// get a reference to the input element
-// eslint-disable-next-line no-undef
-// const inputElement = document.querySelector('input[type="file"]');
-
-// create a FilePond instance at the input element location
-
-// const pond = FilePond.create(inputElement);
 
 // Settings Tab
 function newProjectAlert() {
